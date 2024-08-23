@@ -19,13 +19,13 @@ module.exports = (env, argv) => {
       loader: "babel-loader",
     },
   };
-  
+
   const ruleForStyles = {
-    test: /\.(c|sc|sa)ss$/i, //css,scss,sass
+    test: /\.(c|sc|sa)ss$/i,
     use: [
-      isProduction ? MiniCssExtractPlugin.loader : "style-loader", // Creates `style` nodes from JS strings
-      "css-loader", // Translates CSS into CommonJS
-      "sass-loader", // Compiles Sass to CSS
+      isProduction ? MiniCssExtractPlugin.loader : "style-loader",
+      "css-loader",
+      "sass-loader",
     ],
   };
 
@@ -41,12 +41,12 @@ module.exports = (env, argv) => {
 
   const plugins = [
     new HtmlWebpackPlugin({
-      inject: true, // INYECTA EL BUNDLE AL TEMPLATE HTML EN ETIQUETA HEAD
-      template: "./public/index.html", // LA RUTA AL TEMPLATE HTML
-      filename: "./index.html", // NOMBRE FINAL DEL ARCHIVO
+      inject: true,
+      template: "./public/index.html",
+      filename: "./index.html",
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].[chunkhash].css",
+      filename: "[name].[contenthash].css",
     }),
     new CopyPlugin({
       patterns: [
@@ -56,13 +56,9 @@ module.exports = (env, argv) => {
         },
       ],
     }),
-    ...(isProduction
-      ? [
-          new BundleAnalyzerPlugin({
-            analyzerMode: "server",
-          }),
-        ]
-      : []),
+    ...(isProduction ? [] : [new BundleAnalyzerPlugin({
+      analyzerMode: "server",
+    })]),
   ];
 
   return {
@@ -84,6 +80,9 @@ module.exports = (env, argv) => {
     plugins,
 
     optimization: {
+      cache: {
+        type: 'filesystem',
+      },
       minimize: true,
       minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
     },
@@ -93,8 +92,13 @@ module.exports = (env, argv) => {
       },
       compress: true,
       historyApiFallback: true,
-      port: 3001, // Cambia el puerto si 3000 está ocupado
-      open: true, // Abre automáticamente la URL principal en el navegador
+      port: 3001,
+      open: true,
+    },
+    performance: {
+      maxAssetSize: 250000, // Tamaño máximo del archivo en bytes
+      maxEntrypointSize: 250000, // Tamaño máximo del punto de entrada en bytes
+      hints: isProduction ? 'warning' : false,
     },
   };
 };
