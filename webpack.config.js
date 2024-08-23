@@ -33,7 +33,7 @@ module.exports = (env, argv) => {
     test: /\.(png|svg|jpg|jpeg|gif)$/i,
     type: "asset/resource",
     generator: {
-      filename: "static/images/[hash][ext][query]",
+      filename: "static/images/[fullhash][ext][query]",
     },
   };
 
@@ -70,7 +70,7 @@ module.exports = (env, argv) => {
     output: {
       filename: `[name].[${isProduction ? "contenthash" : "hash"}].js`,
       path: path.resolve(__dirname, "dist"),
-      assetModuleFilename: "assets/images/[hash][ext][query]",
+      assetModuleFilename: "assets/images/[fullhash][ext][query]",
       clean: true,
     },
     devtool: isProduction ? false : "source-map",
