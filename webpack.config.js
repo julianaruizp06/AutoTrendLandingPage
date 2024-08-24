@@ -3,7 +3,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
@@ -47,14 +46,6 @@ module.exports = (env, argv) => {
     }),
     new MiniCssExtractPlugin({
       filename: "[name].[chunkhash].css",
-    }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, "src", "assets/images"),
-          to: "assets/images",
-        },
-      ],
     }),
     ...(isProduction
       ? [
