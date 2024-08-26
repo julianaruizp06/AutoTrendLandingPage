@@ -1,91 +1,58 @@
-/** @type {import('webpack').Configuration} */
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-
-module.exports = (env, argv) => {
-  const { mode } = argv;
-  const isProduction = mode === "production";
-
-  const ruleForJavaScript = {
-    test: /\.m?js$/,
-    exclude: /node_modules/,
-    use: {
-      loader: "babel-loader",
-    },
-  };
-  
-  const ruleForStyles = {
-    test: /\.(c|sc|sa)ss$/i, //css,scss,sass
-    use: [
-      isProduction ? MiniCssExtractPlugin.loader : "style-loader", // Creates `style` nodes from JS strings
-      "css-loader", // Translates CSS into CommonJS
-      "sass-loader", // Compiles Sass to CSS
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/', // Ajusta esto según la configuración de Netlify
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      {
+        test: /\.scss$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+      },
+      // Si necesitas manejar otros tipos de archivos, agrégales aquí
     ],
-  };
-
-  const ruleForImages = {
-    test: /\.(png|svg|jpg|jpeg|gif)$/i,
-    type: "asset/resource",
-    generator: {
-      filename: "static/images/[fullhash][ext][query]",
+  },
+  resolve: {
+    alias: {
+      '@styles': path.resolve(__dirname, 'src/styles/'),
     },
-  };
-
-  const rules = [ruleForJavaScript, ruleForStyles, ruleForImages];
-
-  const plugins = [
+  },
+  plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      inject: true, // INYECTA EL BUNDLE AL TEMPLATE HTML EN ETIQUETA HEAD
-      template: "./public/index.html", // LA RUTA AL TEMPLATE HTML
-      filename: "./index.html", // NOMBRE FINAL DEL ARCHIVO
+      template: './public/index.html',
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].[chunkhash].css",
+      filename: '[name].css',
     }),
-    ...(isProduction
-      ? [
-          new BundleAnalyzerPlugin({
-            analyzerMode: "server",
-          }),
-        ]
-      : []),
-  ];
-
-  return {
-    entry: "./src/index.js",
-    output: {
-      filename: `[name].[${isProduction ? "contenthash" : "hash"}].js`,
-      path: path.resolve(__dirname, "dist"),
-      assetModuleFilename: "assets/images/[fullhash][ext][query]",
-      clean: true,
+  ],
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin(),
+      new CssMinimizerPlugin(),
+    ],
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'dist'),
     },
-    devtool: isProduction ? false : "source-map",
-    resolve: {
-      extensions: [".js"],
-      alias: {
-        "@styles": path.resolve(__dirname, "src/styles/"),
-      },
-    },
-    module: { rules },
-    plugins,
-
-    optimization: {
-      minimize: true,
-      minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
-    },
-    devServer: {
-      client: {
-        overlay: true,
-      },
-      compress: true,
-      historyApiFallback: true,
-      port: 3001, // Cambia el puerto si 3000 está ocupado
-      open: true, // Abre automáticamente la URL principal en el navegador
-    },
-  };
+    compress: true,
+    port: 3000,
+    hot: true,
+  },
+  mode: 'production', // Cambia a 'development' para el modo de desarrollo
 };

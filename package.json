@@ -4,17 +4,18 @@
   "description": "Simple CarsLandingPage",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode production --config webpack.config.js",
-    "dev": "webpack --mode development --config webpack.config.js",
-    "build:watch": "webpack --mode production --config webpack.config.js --watch ",
-    "watch": "yarn dev --watch",
     "start": "webpack serve --mode development --config webpack.config.js --hot",
-    "stats": "yarn webpack --profile --json > stats.json"
+    "dev": "webpack --mode development --config webpack.config.js",
+    "build": "webpack --mode production --config webpack.config.js",
+    "build:watch": "webpack --mode production --config webpack.config.js --watch",
+    "watch": "webpack --watch --config webpack.config.js",
+    "clean": "rimraf dist",
+    "stats": "webpack --profile --json > stats.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tono2007/CarsLandingPage.git"
+    "url": "https://github.com/Tono2007/CarsLandingPage.git"
   },
   "keywords": [],
   "author": "Erika Juliana Ruiz <Ejruizp06.dev@gmail.com>",
@@ -24,25 +25,27 @@
   },
   "homepage": "https://github.com/Tono2007/CarsLandingPage#readme",
   "devDependencies": {
-    "@babel/core": "^7.17.7",
+    "@babel/core": "^7.25.2",
     "@babel/plugin-transform-runtime": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "babel-loader": "^8.2.3",
+    "@babel/preset-env": "^7.25.4",
+    "babel-loader": "^8.3.0",
+    "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^10.2.4",
-    "css-loader": "^6.7.1",
+    "css-loader": "^6.11.0",
     "css-minimizer-webpack-plugin": "^3.4.1",
-    "html-webpack-plugin": "^5.5.0",
-    "mini-css-extract-plugin": "^2.6.0",
+    "html-webpack-plugin": "^5.6.0",
+    "mini-css-extract-plugin": "^2.9.1",
+    "rimraf": "^5.0.0",
+    "sass": "^1.77.8",
     "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.1",
-    "webpack": "^5.70.0",
+    "webpack": "^5.94.0",
     "webpack-bundle-analyzer": "^4.5.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.15.2"
   },
   "dependencies": {
-    "sass": "^1.77.8",
     "swiper": "^8.0.7"
   }
 }
