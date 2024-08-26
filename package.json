@@ -15,15 +15,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Tono2007/CarsLandingPage.git"
+    "url": "https://github.com/julianaruizp06/AutoTrendLandingPage"
   },
   "keywords": [],
   "author": "Erika Juliana Ruiz <Ejruizp06.dev@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Tono2007/CarsLandingPage/issues"
+    "url": "https://github.com/julianaruizp06/AutoTrendLandingPage"
   },
-  "homepage": "https://github.com/Tono2007/CarsLandingPage#readme",
+  "homepage": "https://github.com/julianaruizp06/AutoTrendLandingPage#readme",
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/plugin-transform-runtime": "^7.17.0",
